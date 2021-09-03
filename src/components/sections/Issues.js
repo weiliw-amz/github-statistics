@@ -148,7 +148,7 @@ class Fork extends React.Component {
             type: 'line'
           },
           xAxis: {
-            type: 'datetime',
+            type: 'linear',
           },
           yAxis: {
             gridLineWidth: 0,
@@ -167,7 +167,7 @@ class Fork extends React.Component {
             zoomType: 'x',
           },
           xAxis: {
-            type: 'datetime',
+            type: 'linear',
           },
           yAxis: {
             gridLineWidth: 0,
