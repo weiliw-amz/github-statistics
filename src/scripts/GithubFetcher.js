@@ -3,6 +3,27 @@ import { GraphQLClient } from 'graphql-request'
 
 const getProgress = (c, t) => t === 0 ? 100 : Math.floor(c / t * 100)
 
+/**
+ * Reformat the fetched data: 
+ * Map: date(Date) -> daily_count(int) to 
+ * Map: cum_days(int) -> daily_count(int)
+ * @param {Map<date, int>} formattedData 
+ */
+function reformat_date_cumdays(formattedData) {
+  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+  let reformattedData = new Map();
+
+  let date_arr = Array.from(formattedData.keys())
+  let start_date = Math.min.apply( Math, date_arr)
+  // console.log(start_date)
+
+  formattedData.forEach((value, key) => {    
+    reformattedData.set(Math.floor((key - start_date) / _MS_PER_DAY), value);
+  })
+
+  return reformattedData
+}
+
 class GithubFetcher {
 
   constructor(token) {
@@ -245,16 +266,17 @@ class GithubFetcher {
       pageIndex += 1
       // onUpdate callback if existed
       if (this.liveUpdate && onUpdate && pageIndex % this.pagesPerUpdate === 0) {
-        onUpdate(formattedData)
+        onUpdate(reformat_date_cumdays(formattedData))
       }
     } while (hasNextPage)
-    if (onUpdate) onUpdate(formattedData)
+    if (onUpdate) onUpdate(reformat_date_cumdays(formattedData))
     if (onFinish) onFinish({
       total: totalToFetch,
       maxIncrement,
       createdAt,
     })
-    return formattedData
+ 
+    return reformat_date_cumdays(formattedData)
   }
 
   /**
@@ -357,18 +379,18 @@ class GithubFetcher {
 
       // onUpdate callback if existed
       if (this.liveUpdate && onUpdate && pageIndex % this.pagesPerUpdate === 0) {
-        onUpdate(formattedData)
+        onUpdate(reformat_date_cumdays(formattedData))
       }
     } while (hasNextPage)
 
-    if (onUpdate) onUpdate(formattedData)
+    if (onUpdate) onUpdate(reformat_date_cumdays(formattedData))
     if (onFinish) onFinish({
       total: totalToFetch,
       maxIncrement,
       createdAt,
     })
 
-    return formattedData
+    return reformat_date_cumdays(formattedData)
   }
 
   /**
@@ -471,18 +493,18 @@ class GithubFetcher {
 
       // onUpdate callback if existed
       if (this.liveUpdate && onUpdate && pageIndex % this.pagesPerUpdate === 0) {
-        onUpdate(formattedData)
+        onUpdate(reformat_date_cumdays(formattedData))
       }
     } while (hasNextPage)
 
-    if (onUpdate) onUpdate(formattedData)
+    if (onUpdate) onUpdate(reformat_date_cumdays(formattedData))
     if (onFinish) onFinish({
       total: totalToFetch,
       maxIncrement,
       createdAt,
     })
 
-    return formattedData
+    return reformat_date_cumdays(formattedData)
   }
 
   /**
@@ -585,18 +607,18 @@ class GithubFetcher {
 
       // onUpdate callback if existed
       if (this.liveUpdate && onUpdate && pageIndex % this.pagesPerUpdate === 0) {
-        onUpdate(formattedData)
+        onUpdate(reformat_date_cumdays(formattedData))
       }
     } while (hasNextPage)
 
-    if (onUpdate) onUpdate(formattedData)
+    if (onUpdate) onUpdate(reformat_date_cumdays(formattedData))
     if (onFinish) onFinish({
       total: totalToFetch,
       maxIncrement,
       createdAt,
     })
 
-    return formattedData
+    return reformat_date_cumdays(formattedData)
   }
 
   /**
@@ -716,18 +738,18 @@ class GithubFetcher {
 
       // onUpdate callback if existed
       if (this.liveUpdate && onUpdate && pageIndex % this.pagesPerUpdate === 0) {
-        onUpdate(formattedData)
+        onUpdate(reformat_date_cumdays(formattedData))
       }
     } while (hasNextPage)
 
-    if (onUpdate) onUpdate(formattedData)
+    if (onUpdate) onUpdate(reformat_date_cumdays(formattedData))
     if (onFinish) onFinish({
       total: totalToFetch,
       maxIncrement,
       createdAt: since,
     })
 
-    return formattedData
+    return reformat_date_cumdays(formattedData)
   }
 
   /**
